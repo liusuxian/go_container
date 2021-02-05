@@ -6,21 +6,33 @@ import (
 )
 
 type ArrayStack struct {
-	stack []interface{}
-
-	mu sync.Mutex
+	stack    []interface{} // array stack
+	topIndex int           // stack top index
+	mu       sync.Mutex
 }
 
+// new array stack
 func NewStack(cap int) *ArrayStack {
 	return &ArrayStack{
-		stack: make([]interface{}, 0, cap),
+		stack:    make([]interface{}, 0, cap),
+		topIndex: -1,
 	}
 }
 
 func (as *ArrayStack) Push(v interface{}) interface{} {
 	as.mu.Lock()
 	defer as.mu.Unlock()
-	as.stack = append(as.stack, v)
+
+	if len(as.stack) == 0 && as.topIndex < 0 {
+		as.stack = append(as.stack, v)
+		as.topIndex = 0
+	} else if len(as.stack) > as.topIndex+1 {
+		as.topIndex++
+		as.stack[as.topIndex] = v
+	} else {
+		as.stack = append(as.stack, v)
+		as.topIndex++
+	}
 	return v
 }
 
@@ -28,12 +40,13 @@ func (as *ArrayStack) Pop() (interface{}, error) {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
-	if len(as.stack) == 0 {
+	if as.topIndex < 0 {
 		return nil, errors.New("stack is empty")
 	}
 
-	v := as.stack[len(as.stack)-1]
-	as.stack = as.stack[:len(as.stack)-1]
+	v := as.stack[as.topIndex]
+	as.stack[as.topIndex] = nil
+	as.topIndex--
 	return v, nil
 }
 
@@ -41,18 +54,18 @@ func (as *ArrayStack) Peek() (interface{}, error) {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
-	if len(as.stack) == 0 {
+	if as.topIndex < 0 {
 		return nil, errors.New("stack is empty")
 	}
 
-	return as.stack[len(as.stack)-1], nil
+	return as.stack[as.topIndex], nil
 }
 
 func (as *ArrayStack) IsEmpty() bool {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
-	if len(as.stack) == 0 {
+	if as.topIndex < 0 {
 		return true
 	}
 
