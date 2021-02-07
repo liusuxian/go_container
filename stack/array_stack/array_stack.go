@@ -5,21 +5,21 @@ import (
 	"sync"
 )
 
-type ArrayStack struct {
+type arrayStack struct {
 	stack    []interface{} // array stack
 	topIndex int           // stack top index
 	mu       sync.Mutex
 }
 
 // new array stack
-func NewStack(cap int) *ArrayStack {
-	return &ArrayStack{
+func NewStack(cap int) *arrayStack {
+	return &arrayStack{
 		stack:    make([]interface{}, 0, cap),
 		topIndex: -1,
 	}
 }
 
-func (as *ArrayStack) Push(v interface{}) interface{} {
+func (as *arrayStack) Push(v interface{}) interface{} {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
@@ -36,7 +36,7 @@ func (as *ArrayStack) Push(v interface{}) interface{} {
 	return v
 }
 
-func (as *ArrayStack) Pop() (interface{}, error) {
+func (as *arrayStack) Pop() (interface{}, error) {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
@@ -50,7 +50,7 @@ func (as *ArrayStack) Pop() (interface{}, error) {
 	return v, nil
 }
 
-func (as *ArrayStack) Peek() (interface{}, error) {
+func (as *arrayStack) Peek() (interface{}, error) {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
@@ -61,7 +61,7 @@ func (as *ArrayStack) Peek() (interface{}, error) {
 	return as.stack[as.topIndex], nil
 }
 
-func (as *ArrayStack) IsEmpty() bool {
+func (as *arrayStack) Empty() bool {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 
@@ -72,7 +72,7 @@ func (as *ArrayStack) IsEmpty() bool {
 	return false
 }
 
-func (as *ArrayStack) Search(v interface{}) int {
+func (as *arrayStack) Search(v interface{}) int {
 	as.mu.Lock()
 	defer as.mu.Unlock()
 

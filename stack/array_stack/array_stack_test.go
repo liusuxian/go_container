@@ -15,20 +15,21 @@ func TestArrayStack(t *testing.T) {
 
 	v, err = stack.Pop()
 	t.Log("222: ", v.(int), err, stack.topIndex)
-	t.Log("222: ", stack.IsEmpty(), stack.topIndex)
+	t.Log("222: ", stack.Empty(), stack.topIndex)
 	t.Log("222: ", stack.Search(1), stack.topIndex)
 
 	v, err = stack.Pop()
 	t.Log("333: ", v.(int), err, stack.topIndex)
-	t.Log("333: ", stack.IsEmpty(), stack.topIndex)
+	t.Log("333: ", stack.Empty(), stack.topIndex)
 
 	stack.Push(3)
 	v, err = stack.Peek()
-	t.Log("444: ",v.(int), err, stack.topIndex)
+	t.Log("444: ", v.(int), err, stack.topIndex)
 
 	v, err = stack.Pop()
-	t.Log("555: ",v.(int), err, stack.topIndex)
+	t.Log("555: ", v.(int), err, stack.topIndex)
 
 	stack.Push(4)
-	t.Log("666: ",v.(int), err, stack.topIndex)
+	v, err = stack.Peek()
+	t.Log("666: ", v.(int), err, stack.topIndex)
 }

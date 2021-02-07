@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type LinkedListStack struct {
+type linkedListStack struct {
 	stack *list.List // linkedList stack
 	mu    sync.Mutex
 }
