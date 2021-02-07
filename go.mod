@@ -1,3 +1,3 @@
-module go_container
+module github.com/liusuxian/go_container
 
 go 1.15
